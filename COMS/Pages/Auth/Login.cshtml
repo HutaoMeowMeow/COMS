@@ -1,0 +1,340 @@
+@page
+@model COMS.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - COMS</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+<<<<<<< HEAD
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: #f5f6fa;
+        }
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            background: #fff;
+        }
+        .login-visual {
+            flex: 1;
+            background: linear-gradient(135deg, #0d6efd 0%, #1a1f36 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .login-visual::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+        .login-visual::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -80px;
+            left: -80px;
+        }
+        .login-visual .logo-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .login-visual h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0 0 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .login-visual p {
+            opacity: 0.85;
+            font-size: 1rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            max-width: 360px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .features-list {
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .features-list .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+        .features-list .feature-item i {
+            font-size: 1.2rem;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .login-form-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: #fff;
+        }
+        .login-form-wrap {
+            width: 100%;
+            max-width: 420px;
+        }
+        .login-form-wrap .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+        .login-form-wrap .brand i {
+            font-size: 32px;
+            color: #0d6efd;
+        }
+        .login-form-wrap .brand h2 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+            color: #1a1f36;
+        }
+        .login-form-wrap .brand span {
+            font-size: 0.8rem;
+            color: #6c757d;
+            display: block;
+            margin-top: 2px;
+        }
+        .login-form-wrap .form-label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+        .login-form-wrap .form-control {
+            border-radius: 10px;
+            border: 1.5px solid #e9ecef;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .login-form-wrap .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+        .login-form-wrap .input-group-text {
+            border-radius: 10px 0 0 10px;
+            border: 1.5px solid #e9ecef;
+            border-right: none;
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        .login-form-wrap .form-control.border-start-0 {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        .login-form-wrap .btn-primary {
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            background: #0d6efd;
+            border: none;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .login-form-wrap .btn-primary:hover {
+            background: #0b5ed7;
+            transform: translateY(-1px);
+        }
+        .login-form-wrap .btn-primary:disabled {
+            opacity: 0.7;
+            transform: none;
+        }
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .login-footer a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        @@media (max-width: 768px) {
+            .login-visual { display: none; }
+            .login-form-side { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-visual">
+            <i class="bi bi-water logo-icon"></i>
+            <h1>COMS</h1>
+            <p>Canal Obstruction Monitoring System — real-time flood prevention and community reporting.</p>
+            <div class="features-list">
+                <div class="feature-item">
+                    <i class="bi bi-router"></i>
+                    <span>Real-time IoT sensor monitoring</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-bell"></i>
+                    <span>Instant obstruction alerts</span>
+                </div>
+                <div class="feature-item">
+                    <i class="bi bi-people"></i>
+                    <span>Community reporting and updates</span>
+                </div>
+            </div>
+        </div>
+        <div class="login-form-side">
+            <div class="login-form-wrap">
+                <div class="brand">
+                    <i class="bi bi-water"></i>
+                    <div>
+                        <h2>Welcome back</h2>
+                        <span>Sign in to your account</span>
+                    </div>
+                </div>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            <input type="email" class="form-control border-start-0" id="email" placeholder="you@example.com" required />
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control border-start-0" id="password" placeholder="Enter your password" required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="loginBtn">
+                        <i class="bi bi-box-arrow-in-right"></i> Sign In
+                    </button>
+                </form>
+                <div class="login-footer">
+                    Don't have an account? <a href="/Auth/Register">Create one</a>
+=======
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header text-center border-0 bg-primary text-white">
+                        <i class="bi bi-water"></i> COMS Login
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                        <div class="mt-3 text-center">
+                            <a href="/Auth/Register">Create an account</a>
+                        </div>
+                    </div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+<<<<<<< HEAD
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Signing in...';
+
+            try {
+                const response = await fetch('/api/Auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('coms_token', data.token);
+                    window.location.href = '/Dashboard';
+                } else {
+                    const err = await response.json();
+                    alert(err.message || 'Invalid email or password');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Sign In';
+=======
+
+            const response = await fetch('/api/Auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('coms_token', data.token);
+                window.location.href = '/Dashboard';
+            } else {
+                alert('Invalid email or password');
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            }
+        });
+    </script>
+</body>
+</html>

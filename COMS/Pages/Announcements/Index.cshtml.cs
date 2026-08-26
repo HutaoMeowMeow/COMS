@@ -1,0 +1,12 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace COMS.Pages.Announcements;
+
+public class IndexModel : PageModel
+{
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
+}

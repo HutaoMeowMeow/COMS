@@ -1,0 +1,342 @@
+@page
+@model COMS.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<<<<<<< HEAD
+<div class="page-header">
+    <div>
+        <h2>Dashboard</h2>
+        <p class="text-muted mb-0">Welcome back! Here's what's happening today.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="stat-icon bg-primary-soft"><i class="bi bi-water"></i></div>
+                <div class="stat-content">
+                    <h5>Total Canals</h5>
+                    <h2 id="totalCanals">@Model.Summary.TotalCanals</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="stat-icon bg-success-soft"><i class="bi bi-router"></i></div>
+                <div class="stat-content">
+                    <h5>Active Sensors</h5>
+                    <h2 id="totalSensors">@Model.Summary.TotalSensors</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="stat-icon bg-danger-soft"><i class="bi bi-exclamation-triangle"></i></div>
+                <div class="stat-content">
+                    <h5>Active Alerts</h5>
+                    <h2 id="activeAlerts">@Model.Summary.ActiveAlerts</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card">
+            <div class="card-body">
+                <div class="stat-icon bg-warning-soft"><i class="bi bi-file-earmark-text"></i></div>
+                <div class="stat-content">
+                    <h5>Pending Reports</h5>
+                    <h2 id="pendingReports">@Model.Summary.PendingReports</h2>
+                </div>
+            </div>
+        </div>
+=======
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-subtitle">Real-time overview of canal monitoring and flood risk status.</p>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-water"></i> Canal Status Overview</span>
+                <span class="badge bg-primary">Real-time</span>
+            </div>
+=======
+            <div class="card-header">Canal Status Overview</div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="canalsStatusTable">
+                        <thead>
+                            <tr>
+                                <th>Canal</th>
+                                <th>Status</th>
+                                <th>Water Level</th>
+                                <th>Risk</th>
+                                <th>Last Reading</th>
+                            </tr>
+                        </thead>
+                        <tbody id="canalsStatusBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-exclamation-triangle"></i> Recent Alerts</span>
+                <span class="badge bg-danger">Live</span>
+            </div>
+=======
+            <div class="card-header">Recent Alerts</div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            <div class="card-body alert-panel" id="recentAlertsPanel">
+                <div id="recentAlertsList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header"><i class="bi bi-bar-chart"></i> Alerts by Severity</div>
+=======
+            <div class="card-header">Alerts by Severity</div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="alertsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header"><i class="bi bi-graph-up"></i> Risk Levels by Canal</div>
+=======
+            <div class="card-header">Risk Levels by Canal</div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+let alertsChart = null;
+let riskChart = null;
+
+async function loadDashboard() {
+<<<<<<< HEAD
+    const summaryRes = await apiCall('/api/Dashboard/summary');
+    if (summaryRes.ok) {
+        const summary = await summaryRes.json();
+        document.getElementById('totalCanals').textContent = summary.totalCanals;
+        document.getElementById('totalSensors').textContent = summary.totalSensors;
+        document.getElementById('activeAlerts').textContent = summary.activeAlerts;
+        document.getElementById('pendingReports').textContent = summary.pendingReports;
+    }
+
+    const statusRes = await apiCall('/api/Canals/status');
+    if (statusRes.ok) {
+        const statuses = await statusRes.json();
+        const tbody = document.getElementById('canalsStatusBody');
+        if (statuses.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No canals found.</td></tr>';
+        } else {
+            tbody.innerHTML = statuses.map(s => `
+                <tr>
+                    <td><strong>${s.canalName}</strong></td>
+                    <td><span class="status-dot status-${s.status.toLowerCase()}"></span>${s.status}</td>
+                    <td>${s.currentWaterLevel != null ? s.currentWaterLevel.toFixed(2) + ' m' : 'N/A'}</td>
+                    <td>${s.currentRiskLevel || 'N/A'}</td>
+                    <td>${s.lastReadingAt ? new Date(s.lastReadingAt).toLocaleString() : 'N/A'}</td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    const alertsRes = await apiCall('/api/Alerts/active');
+    if (alertsRes.ok) {
+        const alerts = await alertsRes.json();
+        const list = document.getElementById('recentAlertsList');
+        if (alerts.length === 0) {
+            list.innerHTML = '<div class="empty-state"><i class="bi bi-check-circle"></i><p>No active alerts. All systems normal.</p></div>';
+        } else {
+            list.innerHTML = alerts.slice(0, 10).map(a => `
+                <div class="alert alert-${a.severity === 'High' ? 'danger' : 'warning'} mb-2">
+                    <strong>${a.title}</strong><br/>
+                    <small>${a.description}</small><br/>
+                    <small class="text-muted">${new Date(a.triggeredAt).toLocaleString()}</small>
+                </div>
+            `).join('');
+        }
+    }
+
+    const analyticsRes = await apiCall('/api/Risk/analytics');
+    if (analyticsRes.ok) {
+        const analytics = await analyticsRes.json();
+        const labels = analytics.map(a => a.canalName);
+        const totalData = analytics.map(a => a.totalAlerts);
+        const activeData = analytics.map(a => a.activeAlerts);
+        const riskData = analytics.map(a => a.currentRiskLevel);
+
+        const ctx1 = document.getElementById('alertsChart').getContext('2d');
+        if (alertsChart) alertsChart.destroy();
+        alertsChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Total Alerts', data: totalData, backgroundColor: '#0d6efd' },
+                    { label: 'Active Alerts', data: activeData, backgroundColor: '#dc3545' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        const riskCounts = {};
+        riskData.forEach(r => { riskCounts[r] = (riskCounts[r] || 0) + 1; });
+        const ctx2 = document.getElementById('riskChart').getContext('2d');
+        if (riskChart) riskChart.destroy();
+        riskChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(riskCounts),
+                datasets: [{
+                    data: Object.values(riskCounts),
+                    backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+=======
+    showLoading();
+    try {
+        const summaryRes = await apiCall('/api/Dashboard/summary');
+        if (summaryRes.ok) {
+            const summary = await summaryRes.json();
+            document.getElementById('totalCanals').textContent = summary.totalCanals;
+            document.getElementById('totalSensors').textContent = summary.totalSensors;
+            document.getElementById('activeAlerts').textContent = summary.activeAlerts;
+            document.getElementById('pendingReports').textContent = summary.pendingReports;
+        }
+
+        const statusRes = await apiCall('/api/Canals/status');
+        if (statusRes.ok) {
+            const statuses = await statusRes.json();
+            const tbody = document.getElementById('canalsStatusBody');
+            if (statuses.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No canals found.</td></tr>';
+            } else {
+                tbody.innerHTML = statuses.map(s => `
+                    <tr>
+                        <td>${s.canalName}</td>
+                        <td><span class="status-dot status-${s.status.toLowerCase()}"></span>${s.status}</td>
+                        <td>${s.currentWaterLevel != null ? s.currentWaterLevel.toFixed(2) + ' m' : 'N/A'}</td>
+                        <td>${s.currentRiskLevel || 'N/A'}</td>
+                        <td>${s.lastReadingAt ? new Date(s.lastReadingAt).toLocaleString() : 'N/A'}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        const alertsRes = await apiCall('/api/Alerts/active');
+        if (alertsRes.ok) {
+            const alerts = await alertsRes.json();
+            const list = document.getElementById('recentAlertsList');
+            if (alerts.length === 0) {
+                list.innerHTML = '<p class="text-muted">No active alerts.</p>';
+            } else {
+                list.innerHTML = alerts.slice(0, 10).map(a => `
+                    <div class="alert alert-${a.severity === 'High' ? 'danger' : 'warning'} mb-2">
+                        <strong>${a.title}</strong><br/>
+                        <small>${a.description}</small><br/>
+                        <small class="text-muted">${new Date(a.triggeredAt).toLocaleString()}</small>
+                    </div>
+                `).join('');
+            }
+        }
+
+        const analyticsRes = await apiCall('/api/Risk/analytics');
+        if (analyticsRes.ok) {
+            const analytics = await analyticsRes.json();
+            const labels = analytics.map(a => a.canalName);
+            const totalData = analytics.map(a => a.totalAlerts);
+            const activeData = analytics.map(a => a.activeAlerts);
+            const riskData = analytics.map(a => a.currentRiskLevel);
+
+            const ctx1 = document.getElementById('alertsChart').getContext('2d');
+            if (alertsChart) alertsChart.destroy();
+            alertsChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Total Alerts', data: totalData, backgroundColor: '#007bff' },
+                        { label: 'Active Alerts', data: activeData, backgroundColor: '#dc3545' }
+                    ]
+                }
+            });
+
+            const riskCounts = {};
+            riskData.forEach(r => { riskCounts[r] = (riskCounts[r] || 0) + 1; });
+            const ctx2 = document.getElementById('riskChart').getContext('2d');
+            if (riskChart) riskChart.destroy();
+            riskChart = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(riskCounts),
+                    datasets: [{
+                        data: Object.values(riskCounts),
+                        backgroundColor: ['#28a745', '#ffc107', '#dc3545']
+                    }]
+                }
+            });
+        }
+    } catch (e) {
+        console.error('Dashboard load error:', e);
+        showAlert('Failed to load dashboard: ' + e.message, 'danger');
+    } finally {
+        hideLoading();
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadDashboard);
+initSignalR((type, data) => {
+    if (type === 'alert') loadDashboard();
+});
+</script>
+}

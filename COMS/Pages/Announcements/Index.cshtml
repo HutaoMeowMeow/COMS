@@ -1,0 +1,67 @@
+@page
+@model COMS.Pages.Announcements.IndexModel
+@{
+    ViewData["Title"] = "Announcements";
+}
+
+<div class="page-header">
+    <div>
+        <h2>Announcements</h2>
+        <p class="text-muted mb-0">Stay updated with the latest community news and LGU announcements.</p>
+    </div>
+</div>
+
+<div class="row" id="announcementsContainer">
+    <div class="col-12">
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Loading announcements...</p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+async function loadAnnouncements() {
+    const response = await apiCall('/api/Announcements');
+    if (response.ok) {
+        const announcements = await response.json();
+        const container = document.getElementById('announcementsContainer');
+        
+        if (announcements.length === 0) {
+            container.innerHTML = `
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-megaphone"></i>
+                        <p>No announcements yet. Check back later for updates from LGU and Barangay officials.</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = announcements.map(a => `
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="role-badge role-${a.postedByRole.toLowerCase()}">${a.postedByRole}</span>
+                            <small class="text-muted">${new Date(a.createdAt).toLocaleDateString()}</small>
+                        </div>
+                        <h5 class="card-title">${a.title}</h5>
+                        <p class="card-text text-muted">${a.content}</p>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Posted by ${a.postedByUserName}</small>
+                            ${a.barangay ? `<small class="text-muted"><i class="bi bi-geo-alt"></i> ${a.barangay}</small>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadAnnouncements);
+</script>
+}

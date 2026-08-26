@@ -1,0 +1,285 @@
+@page
+@model COMS.Pages.Canals.DetailsModel
+@{
+    ViewData["Title"] = Model.Canal?.Name ?? "Canal Details";
+}
+
+<<<<<<< HEAD
+<div class="page-header">
+    <div>
+        <h2>@ViewData["Title"]</h2>
+        <p class="text-muted mb-0">Canal information, sensors, and real-time readings.</p>
+    </div>
+    <a href="/Canals" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Canals
+    </a>
+=======
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@ViewData["Title"]</h2>
+    <a href="/Canals" class="btn btn-secondary">Back to Canals</a>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header"><i class="bi bi-info-circle"></i> Canal Information</div>
+            <div class="card-body">
+                <div class="mb-2"><strong>Location:</strong> @Model.Canal?.Location</div>
+                <div class="mb-2"><strong>Barangay:</strong> @Model.Canal?.Barangay</div>
+                <div class="mb-2"><strong>Municipality:</strong> @Model.Canal?.Municipality</div>
+                <div class="mb-2"><strong>Length:</strong> @Model.Canal?.LengthMeters m</div>
+                <div class="mb-2"><strong>Width:</strong> @Model.Canal?.WidthMeters m</div>
+                <div class="mb-2"><strong>Depth:</strong> @Model.Canal?.DepthMeters m</div>
+                <div class="mb-2"><strong>Status:</strong> <span class="badge bg-@(Model.Canal?.Status == "Normal" ? "success" : "warning")">@Model.Canal?.Status</span></div>
+                <div class="mb-2"><strong>Normal Level:</strong> @Model.Canal?.NormalWaterLevel m</div>
+                <div class="mb-2"><strong>Warning Level:</strong> @Model.Canal?.WarningWaterLevel m</div>
+                <div class="mb-0"><strong>Critical Level:</strong> @Model.Canal?.CriticalWaterLevel m</div>
+=======
+            <div class="card-header">Canal Information</div>
+            <div class="card-body">
+                <p><strong>Location:</strong> @Model.Canal?.Location</p>
+                <p><strong>Barangay:</strong> @Model.Canal?.Barangay</p>
+                <p><strong>Municipality:</strong> @Model.Canal?.Municipality</p>
+                <p><strong>Length:</strong> @Model.Canal?.LengthMeters m</p>
+                <p><strong>Width:</strong> @Model.Canal?.WidthMeters m</p>
+                <p><strong>Depth:</strong> @Model.Canal?.DepthMeters m</p>
+                <p><strong>Status:</strong> <span class="badge bg-@(Model.Canal?.Status == "Normal" ? "success" : "warning")">@Model.Canal?.Status</span></p>
+                <p><strong>Normal Level:</strong> @Model.Canal?.NormalWaterLevel m</p>
+                <p><strong>Warning Level:</strong> @Model.Canal?.WarningWaterLevel m</p>
+                <p><strong>Critical Level:</strong> @Model.Canal?.CriticalWaterLevel m</p>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-router"></i> Sensors</span>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSensorModal">
+                    <i class="bi bi-plus"></i> Add Sensor
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+=======
+            <div class="card-header d-flex justify-content-between">
+                <span>Sensors</span>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSensorModal">Add Sensor</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Protocol</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sensor in Model.Sensors)
+                            {
+                                <tr>
+                                    <td>@sensor.SensorCode</td>
+                                    <td>@sensor.SensorType</td>
+                                    <td>@sensor.LocationDescription</td>
+                                    <td>@sensor.CommunicationProtocol</td>
+                                    <td><span class="badge bg-@(sensor.Status == "Online" ? "success" : "danger")">@sensor.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+<<<<<<< HEAD
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-activity"></i> Real-Time Readings</span>
+                <span class="badge bg-success">Live</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="readingsTable">
+=======
+            <div class="card-header">Real-Time Readings</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="readingsTable">
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                        <thead>
+                            <tr>
+                                <th>Sensor</th>
+                                <th>Water Level</th>
+                                <th>Flow Rate</th>
+                                <th>Debris Level</th>
+                                <th>Status</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readingsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addSensorModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Sensor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addSensorForm">
+                    <div class="mb-3">
+                        <label class="form-label">Sensor Code</label>
+                        <input type="text" class="form-control" id="sensorCode" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select class="form-select" id="sensorType">
+                            <option value="WaterLevel">Water Level</option>
+                            <option value="FlowRate">Flow Rate</option>
+                            <option value="Debris">Debris</option>
+                            <option value="Multi">Multi-sensor</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location Description</label>
+                        <input type="text" class="form-control" id="sensorLocation" />
+                    </div>
+<<<<<<< HEAD
+=======
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Latitude</label>
+                            <input type="number" step="any" class="form-control" id="sensorLat" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Longitude</label>
+                            <input type="number" step="any" class="form-control" id="sensorLng" />
+                        </div>
+                    </div>
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                    <div class="mb-3">
+                        <label class="form-label">Protocol</label>
+                        <select class="form-select" id="sensorProtocol">
+                            <option value="MQTT">MQTT</option>
+                            <option value="LoRaWAN">LoRaWAN</option>
+                            <option value="HTTP">HTTP</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addSensor()">Add Sensor</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+async function loadReadings() {
+<<<<<<< HEAD
+    const response = await apiCall(`/api/Readings/sensor/${Model.Canal?.Id}?limit=20`);
+    if (response.ok) {
+        const readings = await response.json();
+        if (readings.length === 0) {
+            document.getElementById('readingsBody').innerHTML = '<tr><td colspan="6" class="text-center text-muted">No readings available.</td></tr>';
+            return;
+        }
+        document.getElementById('readingsBody').innerHTML = readings.map(r => `
+            <tr>
+                <td>${r.sensorCode}</td>
+                <td>${r.waterLevel.toFixed(2)} m</td>
+                <td>${r.flowRate.toFixed(2)}</td>
+                <td>${r.debrisLevel != null ? r.debrisLevel.toFixed(2) : 'N/A'}</td>
+                <td><span class="badge bg-${r.readingStatus === 'Normal' ? 'success' : r.readingStatus === 'Warning' ? 'warning' : 'danger'}">${r.readingStatus}</span></td>
+                <td>${new Date(r.readingTimestamp).toLocaleString()}</td>
+            </tr>
+        `).join('');
+=======
+    showLoading();
+    try {
+        const response = await apiCall(`/api/Readings/canal/${Model.Canal?.Id}?limit=20`);
+        if (response.ok) {
+            const readings = await response.json();
+            const tbody = document.getElementById('readingsBody');
+            if (readings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No readings available.</td></tr>';
+            } else {
+                tbody.innerHTML = readings.map(r => `
+                    <tr>
+                        <td>${r.sensorCode}</td>
+                        <td>${r.waterLevel.toFixed(2)} m</td>
+                        <td>${r.flowRate.toFixed(2)}</td>
+                        <td>${r.debrisLevel != null ? r.debrisLevel.toFixed(2) : 'N/A'}</td>
+                        <td><span class="badge bg-${r.readingStatus === 'Normal' ? 'success' : r.readingStatus === 'Warning' ? 'warning' : 'danger'}">${r.readingStatus}</span></td>
+                        <td>${new Date(r.readingTimestamp).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+    } catch (e) {
+        showAlert('Failed to load readings: ' + e.message, 'danger');
+    } finally {
+        hideLoading();
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+    }
+}
+
+async function addSensor() {
+    const data = {
+        sensorCode: document.getElementById('sensorCode').value,
+        sensorType: document.getElementById('sensorType').value,
+        canalId: '@Model.Canal?.Id',
+        locationDescription: document.getElementById('sensorLocation').value || undefined,
+<<<<<<< HEAD
+        latitude: 0,
+        longitude: 0,
+=======
+        latitude: parseFloat(document.getElementById('sensorLat').value) || 0,
+        longitude: parseFloat(document.getElementById('sensorLng').value) || 0,
+>>>>>>> db46004de7d488abfb831db9c6cd307518689719
+        communicationProtocol: document.getElementById('sensorProtocol').value
+    };
+
+    const response = await apiCall('/api/Sensors', {
+        method: 'POST',
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+        bootstrap.Modal.getInstance(document.getElementById('addSensorModal')).hide();
+        document.getElementById('addSensorForm').reset();
+        showAlert('Sensor added successfully', 'success');
+        setTimeout(() => window.location.reload(), 1000);
+    } else {
+        showAlert('Failed to add sensor', 'danger');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadReadings);
+initSignalR((type, data) => {
+    if (type === 'reading' && data.canalId === '@Model.Canal?.Id') loadReadings();
+});
+</script>
+}
