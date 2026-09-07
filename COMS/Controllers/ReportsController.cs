@@ -1,4 +1,4 @@
-using COMS.DTOs;
+﻿using COMS.DTOs;
 using COMS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,29 +32,6 @@ public class ReportsController : ControllerBase
         return Ok(reports);
     }
 
-<<<<<<< HEAD
-    [Authorize]
-    [HttpGet("my")]
-    public async Task<IActionResult> GetMyReports()
-    {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-            return Unauthorized();
-
-        var reports = await _reportService.GetByUserAsync(Guid.Parse(userId));
-        return Ok(reports);
-    }
-
-    [Authorize]
-    [HttpGet("completed")]
-    public async Task<IActionResult> GetCompletedReports()
-    {
-        var reports = await _reportService.GetCompletedAsync();
-        return Ok(reports);
-    }
-
-=======
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     [Authorize(Roles = "Admin,LGU,Barangay,Maintenance")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
@@ -88,23 +65,6 @@ public class ReportsController : ControllerBase
     }
 
     [Authorize(Roles = "Admin,LGU,Barangay,Maintenance")]
-<<<<<<< HEAD
-    [HttpPost("{id}/complete")]
-    public async Task<IActionResult> Complete(Guid id, [FromBody] CompleteReportDto dto)
-    {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null)
-            return Unauthorized();
-
-        var report = await _reportService.CompleteAsync(id, dto, Guid.Parse(userId));
-        if (report == null)
-            return NotFound();
-        return Ok(report);
-    }
-
-    [Authorize(Roles = "Admin,LGU,Barangay,Maintenance")]
-=======
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {

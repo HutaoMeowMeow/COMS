@@ -1,48 +1,25 @@
-@page
+﻿@page
 @model COMS.Pages.Alerts.IndexModel
 @{
-<<<<<<< HEAD
-    ViewData["Title"] = "Obstruction Alerts";
-}
-
-<div class="page-header">
-    <div>
-        <h2>Obstruction Alerts</h2>
-        <p class="text-muted mb-0">Monitor and manage canal obstruction alerts in real-time.</p>
-    </div>
-    <div class="btn-group" role="group">
-        <button class="btn btn-outline-primary" onclick="loadAlerts('all')">All</button>
-        <button class="btn btn-outline-warning" onclick="loadAlerts('active')">Active</button>
-        <button class="btn btn-outline-success" onclick="loadAlerts('resolved')">Resolved</button>
-=======
     ViewData["Title"] = "Alerts";
 }
 
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="section-header">
-            <div>
-                <h2 class="page-title mb-0">Obstruction Alerts</h2>
-                <p class="page-subtitle mb-0">Track and resolve canal obstruction alerts.</p>
-            </div>
-            <div>
-                <button class="btn btn-outline-primary" onclick="loadAlerts('all')">All</button>
-                <button class="btn btn-outline-warning" onclick="loadAlerts('active')">Active</button>
-                <button class="btn btn-outline-success" onclick="loadAlerts('resolved')">Resolved</button>
-            </div>
-        </div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
+<div class="page-header">
+    <div class="title-group">
+        <h2 class="page-title mb-1">Obstruction Alerts</h2>
+        <p class="page-subtitle mb-0">Track and resolve canal obstruction alerts.</p>
+    </div>
+    <div class="btn-group" role="group">
+        <button class="btn btn-filter btn-outline-primary active" data-filter="all" type="button">All</button>
+        <button class="btn btn-filter btn-outline-primary" data-filter="active" type="button">Active</button>
+        <button class="btn btn-filter btn-outline-primary" data-filter="resolved" type="button">Resolved</button>
     </div>
 </div>
 
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-<<<<<<< HEAD
             <table class="table table-hover" id="alertsTable">
-=======
-            <table class="table table-striped" id="alertsTable">
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -51,12 +28,17 @@
                         <th>Severity</th>
                         <th>Status</th>
                         <th>Triggered At</th>
-                        <th>Actions</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="alertsBody">
                 </tbody>
             </table>
+        </div>
+        <div id="alertsEmpty" class="empty-state" style="display:none;">
+            <i class="bi bi-clipboard-check"></i>
+            <p class="empty-title">No alerts found</p>
+            <p class="text-muted">There are currently no obstruction alerts to display.</p>
         </div>
     </div>
 </div>
@@ -94,56 +76,39 @@
 
 @section Scripts {
 <script>
-async function loadAlerts(filter = 'all') {
-<<<<<<< HEAD
-    let url = '/api/Alerts';
-    if (filter === 'active') url = '/api/Alerts/active';
-    if (filter === 'resolved') url = '/api/Alerts?status=Resolved';
+const severityClass = s => s === 'High' ? 'severity-high' : s === 'Medium' ? 'severity-medium' : 'severity-low';
+const statusClass = s => s === 'Active' ? 'bg-primary' : 'bg-success';
 
-    const response = await apiCall(url);
-    if (response.ok) {
-        const alerts = await response.json();
-        if (alerts.length === 0) {
-            document.getElementById('alertsBody').innerHTML = '<tr><td colspan="7" class="text-center text-muted">No alerts found.</td></tr>';
-            return;
-        }
-        document.getElementById('alertsBody').innerHTML = alerts.map(a => `
-            <tr>
-                <td><strong>${a.title}</strong></td>
-                <td>${a.canalName}</td>
-                <td>${a.alertType}</td>
-                <td><span class="badge bg-${a.severity === 'High' ? 'danger' : 'warning'}">${a.severity}</span></td>
-                <td><span class="badge bg-${a.status === 'Active' ? 'danger' : 'success'}">${a.status}</span></td>
-                <td>${new Date(a.triggeredAt).toLocaleString()}</td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="openUpdateModal('${a.id}', '${a.status}')">Update</button>
-                </td>
-            </tr>
-        `).join('');
-=======
+async function loadAlerts(filter = 'all') {
     showLoading();
     try {
         let url = '/api/Alerts';
         if (filter === 'active') url = '/api/Alerts/active';
-        if (filter === 'resolved') url = '/api/Alerts?status=Resolved';
+        else if (filter === 'resolved') url = '/api/Alerts?status=Resolved';
 
         const response = await apiCall(url);
         if (response.ok) {
             const alerts = await response.json();
             const tbody = document.getElementById('alertsBody');
+            const table = document.getElementById('alertsTable');
+            const empty = document.getElementById('alertsEmpty');
             if (alerts.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No alerts found.</td></tr>';
+                tbody.innerHTML = '';
+                table.style.display = 'none';
+                empty.style.display = 'block';
             } else {
+                table.style.display = 'table';
+                empty.style.display = 'none';
                 tbody.innerHTML = alerts.map(a => `
                     <tr>
-                        <td>${a.title}</td>
+                        <td><strong>${a.title}</strong></td>
                         <td>${a.canalName}</td>
                         <td>${a.alertType}</td>
-                        <td><span class="badge bg-${a.severity === 'High' ? 'danger' : 'warning'}">${a.severity}</span></td>
-                        <td><span class="badge bg-${a.status === 'Active' ? 'danger' : 'success'}">${a.status}</span></td>
+                        <td><span class="badge ${severityClass(a.severity)}">${a.severity}</span></td>
+                        <td><span class="badge ${statusClass(a.status)}">${a.status}</span></td>
                         <td>${new Date(a.triggeredAt).toLocaleString()}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="openUpdateModal('${a.id}', '${a.status}')">Update</button>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary" onclick="openUpdateModal('${a.id}', '${a.status}')">Update</button>
                         </td>
                     </tr>
                 `).join('');
@@ -153,8 +118,12 @@ async function loadAlerts(filter = 'all') {
         showAlert('Failed to load alerts: ' + e.message, 'danger');
     } finally {
         hideLoading();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
+}
+
+function setActiveFilter(btn) {
+    document.querySelector('[data-filter].active').classList.remove('active');
+    btn.classList.add('active');
 }
 
 function openUpdateModal(id, status) {
@@ -176,17 +145,21 @@ async function updateAlert() {
     if (response.ok) {
         bootstrap.Modal.getInstance(document.getElementById('updateAlertModal')).hide();
         loadAlerts();
-<<<<<<< HEAD
-        showAlert('Alert updated successfully', 'success');
-=======
         showAlert('Alert updated', 'success');
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     } else {
         showAlert('Failed to update alert', 'danger');
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => loadAlerts());
+document.addEventListener('DOMContentLoaded', () => {
+    loadAlerts();
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActiveFilter(btn);
+            loadAlerts(btn.dataset.filter);
+        });
+    });
+});
 initSignalR((type, data) => { if (type === 'alert') loadAlerts(); });
 </script>
 }

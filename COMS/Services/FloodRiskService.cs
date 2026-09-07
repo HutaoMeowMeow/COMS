@@ -1,51 +1,22 @@
-using COMS.Data;
+﻿using COMS.Data;
 using COMS.DTOs;
 using COMS.Models;
-<<<<<<< HEAD
-using Google.Cloud.Firestore;
-=======
 using Microsoft.EntityFrameworkCore;
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 
 namespace COMS.Services;
 
 public class FloodRiskService : IFloodRiskService
 {
-<<<<<<< HEAD
-    private readonly IFirestoreRepository<FloodRiskAssessment> _riskRepo;
-    private readonly IFirestoreRepository<Canal> _canalRepo;
-    private readonly IFirestoreRepository<ObstructionAlert> _alertRepo;
-    private readonly IFirestoreRepository<CommunityReport> _reportRepo;
-    private readonly IFirestoreRepository<SensorReading> _readingRepo;
-
-    public FloodRiskService(
-        IFirestoreRepository<FloodRiskAssessment> riskRepo,
-        IFirestoreRepository<Canal> canalRepo,
-        IFirestoreRepository<ObstructionAlert> alertRepo,
-        IFirestoreRepository<CommunityReport> reportRepo,
-        IFirestoreRepository<SensorReading> readingRepo)
-    {
-        _riskRepo = riskRepo;
-        _canalRepo = canalRepo;
-        _alertRepo = alertRepo;
-        _reportRepo = reportRepo;
-        _readingRepo = readingRepo;
-=======
     private readonly ApplicationDbContext _context;
 
     public FloodRiskService(ApplicationDbContext context)
     {
         _context = context;
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 
     public async Task<FloodRiskResponseDto> CreateAssessmentAsync(Guid canalId, string riskLevel, double riskScore, string predictionDetails, string? modelVersion = null)
     {
-<<<<<<< HEAD
-        var canal = await _canalRepo.GetByIdAsync(canalId.ToString());
-=======
         var canal = await _context.Canals.FindAsync(canalId);
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
         if (canal == null)
             throw new InvalidOperationException("Canal not found.");
 
@@ -61,61 +32,31 @@ public class FloodRiskService : IFloodRiskService
             ValidUntil = DateTime.UtcNow.AddDays(7)
         };
 
-<<<<<<< HEAD
-        await _riskRepo.CreateAsync(assessment);
-        return await MapToResponseAsync(assessment);
-=======
         _context.FloodRiskAssessments.Add(assessment);
         await _context.SaveChangesAsync();
 
         return MapToResponse(assessment);
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 
     public async Task<IEnumerable<FloodRiskResponseDto>> GetAllAsync()
     {
-<<<<<<< HEAD
-        var assessments = await _riskRepo.QueryAsync(q => q.OrderByDescending("AssessmentTimestamp"));
-        return await Task.WhenAll(assessments.Select(MapToResponseAsync));
-=======
         return await _context.FloodRiskAssessments
             .OrderByDescending(fra => fra.AssessmentTimestamp)
             .Select(fra => MapToResponse(fra))
             .ToListAsync();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 
     public async Task<IEnumerable<FloodRiskResponseDto>> GetByCanalAsync(Guid canalId)
     {
-<<<<<<< HEAD
-        var assessments = await _riskRepo.QueryAsync(q => q
-            .WhereEqualTo("CanalId", canalId.ToString())
-            .OrderByDescending("AssessmentTimestamp"));
-        return await Task.WhenAll(assessments.Select(MapToResponseAsync));
-=======
         return await _context.FloodRiskAssessments
             .Where(fra => fra.CanalId == canalId)
             .OrderByDescending(fra => fra.AssessmentTimestamp)
             .Select(fra => MapToResponse(fra))
             .ToListAsync();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 
     public async Task<IEnumerable<RiskAnalyticsDto>> GetAnalyticsAsync()
     {
-<<<<<<< HEAD
-        var canals = await _canalRepo.GetAllAsync();
-        var result = new List<RiskAnalyticsDto>();
-
-        foreach (var canal in canals)
-        {
-            var analytics = await GetAnalyticsByCanalAsync(canal.Id);
-            if (analytics != null)
-                result.Add(analytics);
-        }
-
-        return result;
-=======
         var canals = await _context.Canals.ToListAsync();
         var canalIds = canals.Select(c => c.Id).ToArray();
 
@@ -165,35 +106,10 @@ public class FloodRiskService : IFloodRiskService
                 LastAssessment = canalAssessments.Any() ? canalAssessments.Max(fra => fra.AssessmentTimestamp) : DateTime.MinValue
             };
         }).ToList();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 
     public async Task<RiskAnalyticsDto?> GetAnalyticsByCanalAsync(Guid canalId)
     {
-<<<<<<< HEAD
-        var canal = await _canalRepo.GetByIdAsync(canalId.ToString());
-        if (canal == null) return null;
-
-        var totalAlerts = await _alertRepo.CountAsync(q => q.WhereEqualTo("CanalId", canalId.ToString()));
-        var activeAlerts = await _alertRepo.CountAsync(q => q.WhereEqualTo("CanalId", canalId.ToString()).WhereEqualTo("Status", "Active"));
-        var resolvedAlerts = await _alertRepo.CountAsync(q => q.WhereEqualTo("CanalId", canalId.ToString()).WhereEqualTo("Status", "Resolved"));
-        var pendingReports = await _reportRepo.CountAsync(q => q.WhereEqualTo("CanalId", canalId.ToString()).WhereEqualTo("Status", "Pending"));
-
-        var latestReadings = await _readingRepo.QueryAsync(q => q
-            .WhereEqualTo("CanalId", canalId.ToString())
-            .OrderByDescending("ReadingTimestamp")
-            .Limit(10));
-
-        var avgWaterLevel = latestReadings.Any() ? latestReadings.Average(sr => sr.WaterLevel) : 0;
-
-        var latestRisk = (await _riskRepo.QueryAsync(q => q
-            .WhereEqualTo("CanalId", canalId.ToString())
-            .OrderByDescending("AssessmentTimestamp")
-            .Limit(1))).FirstOrDefault();
-
-        var assessments = await _riskRepo.QueryAsync(q => q.WhereEqualTo("CanalId", canalId.ToString()));
-        var lastAssessment = assessments.Any() ? assessments.Max(a => a.AssessmentTimestamp) : DateTime.MinValue;
-=======
         var canal = await _context.Canals.FindAsync(canalId);
         if (canal == null) return null;
 
@@ -215,7 +131,6 @@ public class FloodRiskService : IFloodRiskService
             .OrderByDescending(fra => fra.AssessmentTimestamp)
             .Select(fra => fra.RiskLevel)
             .FirstOrDefaultAsync();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 
         return new RiskAnalyticsDto
         {
@@ -226,16 +141,6 @@ public class FloodRiskService : IFloodRiskService
             ResolvedAlerts = resolvedAlerts,
             PendingReports = pendingReports,
             AverageWaterLevel = Math.Round(avgWaterLevel, 2),
-<<<<<<< HEAD
-            CurrentRiskLevel = latestRisk?.RiskLevel ?? "Low",
-            LastAssessment = lastAssessment
-        };
-    }
-
-    private async Task<FloodRiskResponseDto> MapToResponseAsync(FloodRiskAssessment assessment)
-    {
-        var canal = await _canalRepo.GetByIdAsync(assessment.CanalId.ToString());
-=======
             CurrentRiskLevel = latestRisk ?? "Low",
             LastAssessment = canal.FloodRiskAssessments.Any() ? canal.FloodRiskAssessments.Max(fra => fra.AssessmentTimestamp) : DateTime.MinValue
         };
@@ -243,16 +148,11 @@ public class FloodRiskService : IFloodRiskService
 
     private static FloodRiskResponseDto MapToResponse(FloodRiskAssessment assessment)
     {
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
         return new FloodRiskResponseDto
         {
             Id = assessment.Id,
             CanalId = assessment.CanalId,
-<<<<<<< HEAD
-            CanalName = canal?.Name ?? string.Empty,
-=======
             CanalName = assessment.Canal?.Name ?? string.Empty,
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
             RiskLevel = assessment.RiskLevel,
             RiskScore = assessment.RiskScore,
             PredictionDetails = assessment.PredictionDetails,

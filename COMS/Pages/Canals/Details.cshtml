@@ -1,63 +1,78 @@
-@page
+﻿@page
 @model COMS.Pages.Canals.DetailsModel
 @{
     ViewData["Title"] = Model.Canal?.Name ?? "Canal Details";
+    var statusClass = Model.Canal?.Status == "Normal" ? "bg-success" :
+                     Model.Canal?.Status == "Warning" ? "bg-warning" : "bg-danger";
 }
 
-<<<<<<< HEAD
 <div class="page-header">
-    <div>
-        <h2>@ViewData["Title"]</h2>
-        <p class="text-muted mb-0">Canal information, sensors, and real-time readings.</p>
+    <div class="title-group">
+        <h2 class="page-title mb-1">@Model.Canal?.Name</h2>
+        <p class="page-subtitle mb-0"><i class="bi bi-geo-alt"></i> @Model.Canal?.Location</p>
     </div>
-    <a href="/Canals" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Canals
-    </a>
-=======
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>@ViewData["Title"]</h2>
     <a href="/Canals" class="btn btn-secondary">Back to Canals</a>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <div class="card">
-<<<<<<< HEAD
-            <div class="card-header"><i class="bi bi-info-circle"></i> Canal Information</div>
-            <div class="card-body">
-                <div class="mb-2"><strong>Location:</strong> @Model.Canal?.Location</div>
-                <div class="mb-2"><strong>Barangay:</strong> @Model.Canal?.Barangay</div>
-                <div class="mb-2"><strong>Municipality:</strong> @Model.Canal?.Municipality</div>
-                <div class="mb-2"><strong>Length:</strong> @Model.Canal?.LengthMeters m</div>
-                <div class="mb-2"><strong>Width:</strong> @Model.Canal?.WidthMeters m</div>
-                <div class="mb-2"><strong>Depth:</strong> @Model.Canal?.DepthMeters m</div>
-                <div class="mb-2"><strong>Status:</strong> <span class="badge bg-@(Model.Canal?.Status == "Normal" ? "success" : "warning")">@Model.Canal?.Status</span></div>
-                <div class="mb-2"><strong>Normal Level:</strong> @Model.Canal?.NormalWaterLevel m</div>
-                <div class="mb-2"><strong>Warning Level:</strong> @Model.Canal?.WarningWaterLevel m</div>
-                <div class="mb-0"><strong>Critical Level:</strong> @Model.Canal?.CriticalWaterLevel m</div>
-=======
+<div class="row g-4">
+    <div class="col-xl-4">
+        <div class="card h-100">
             <div class="card-header">Canal Information</div>
             <div class="card-body">
-                <p><strong>Location:</strong> @Model.Canal?.Location</p>
-                <p><strong>Barangay:</strong> @Model.Canal?.Barangay</p>
-                <p><strong>Municipality:</strong> @Model.Canal?.Municipality</p>
-                <p><strong>Length:</strong> @Model.Canal?.LengthMeters m</p>
-                <p><strong>Width:</strong> @Model.Canal?.WidthMeters m</p>
-                <p><strong>Depth:</strong> @Model.Canal?.DepthMeters m</p>
-                <p><strong>Status:</strong> <span class="badge bg-@(Model.Canal?.Status == "Normal" ? "success" : "warning")">@Model.Canal?.Status</span></p>
-                <p><strong>Normal Level:</strong> @Model.Canal?.NormalWaterLevel m</p>
-                <p><strong>Warning Level:</strong> @Model.Canal?.WarningWaterLevel m</p>
-                <p><strong>Critical Level:</strong> @Model.Canal?.CriticalWaterLevel m</p>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Location</span>
+                        <span class="info-value">@Model.Canal?.Location</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Barangay</span>
+                        <span class="info-value">@(Model.Canal?.Barangay ?? "N/A")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Municipality</span>
+                        <span class="info-value">@(Model.Canal?.Municipality ?? "N/A")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Province</span>
+                        <span class="info-value">@(Model.Canal?.Province ?? "N/A")</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Length</span>
+                        <span class="info-value">@Model.Canal?.LengthMeters m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Width</span>
+                        <span class="info-value">@Model.Canal?.WidthMeters m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Depth</span>
+                        <span class="info-value">@Model.Canal?.DepthMeters m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Normal Level</span>
+                        <span class="info-value">@Model.Canal?.NormalWaterLevel m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Warning Level</span>
+                        <span class="info-value">@Model.Canal?.WarningWaterLevel m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Critical Level</span>
+                        <span class="info-value">@Model.Canal?.CriticalWaterLevel m</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="badge @statusClass">@Model.Canal?.Status</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-8">
-        <div class="card">
-<<<<<<< HEAD
+
+    <div class="col-xl-8">
+        <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-router"></i> Sensors</span>
+                <span>Sensors</span>
                 <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSensorModal">
                     <i class="bi bi-plus"></i> Add Sensor
                 </button>
@@ -65,15 +80,6 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover">
-=======
-            <div class="card-header d-flex justify-content-between">
-                <span>Sensors</span>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addSensorModal">Add Sensor</button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
                         <thead>
                             <tr>
                                 <th>Code</th>
@@ -84,15 +90,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var sensor in Model.Sensors)
+                            @if (!Model.Sensors.Any())
                             {
                                 <tr>
-                                    <td>@sensor.SensorCode</td>
-                                    <td>@sensor.SensorType</td>
-                                    <td>@sensor.LocationDescription</td>
-                                    <td>@sensor.CommunicationProtocol</td>
-                                    <td><span class="badge bg-@(sensor.Status == "Online" ? "success" : "danger")">@sensor.Status</span></td>
+                                    <td colspan="5" class="text-center">
+                                        <i class="bi bi-gear-fill"></i> No sensors registered for this canal.
+                                    </td>
                                 </tr>
+                            }
+                            else
+                            {
+                                foreach (var sensor in Model.Sensors)
+                                {
+                                    var sensorStatusClass = sensor.Status == "Online" ? "bg-success" : "bg-danger";
+                                    <tr>
+                                        <td><strong>@sensor.SensorCode</strong></td>
+                                        <td>@sensor.SensorType</td>
+                                        <td>@sensor.LocationDescription</td>
+                                        <td>@sensor.CommunicationProtocol</td>
+                                        <td><span class="badge @sensorStatusClass">@sensor.Status</span></td>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>
@@ -105,20 +123,10 @@
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
-<<<<<<< HEAD
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span><i class="bi bi-activity"></i> Real-Time Readings</span>
-                <span class="badge bg-success">Live</span>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover" id="readingsTable">
-=======
             <div class="card-header">Real-Time Readings</div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped" id="readingsTable">
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                    <table class="table table-hover" id="readingsTable">
                         <thead>
                             <tr>
                                 <th>Sensor</th>
@@ -132,6 +140,11 @@
                         <tbody id="readingsBody">
                         </tbody>
                     </table>
+                    <div id="readingsEmpty" class="empty-state" style="display:none;">
+                        <i class="bi bi-activity"></i>
+                        <p class="empty-title">No readings available</p>
+                        <p>Real-time sensor readings will appear here once data is recorded.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,20 +177,17 @@
                         <label class="form-label">Location Description</label>
                         <input type="text" class="form-control" id="sensorLocation" />
                     </div>
-<<<<<<< HEAD
-=======
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
                             <label class="form-label">Latitude</label>
                             <input type="number" step="any" class="form-control" id="sensorLat" />
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">Longitude</label>
                             <input type="number" step="any" class="form-control" id="sensorLng" />
                         </div>
                     </div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
-                    <div class="mb-3">
+                    <div class="mb-3 mt-1">
                         <label class="form-label">Protocol</label>
                         <select class="form-select" id="sensorProtocol">
                             <option value="MQTT">MQTT</option>
@@ -198,41 +208,29 @@
 @section Scripts {
 <script>
 async function loadReadings() {
-<<<<<<< HEAD
-    const response = await apiCall(`/api/Readings/sensor/${Model.Canal?.Id}?limit=20`);
-    if (response.ok) {
-        const readings = await response.json();
-        if (readings.length === 0) {
-            document.getElementById('readingsBody').innerHTML = '<tr><td colspan="6" class="text-center text-muted">No readings available.</td></tr>';
-            return;
-        }
-        document.getElementById('readingsBody').innerHTML = readings.map(r => `
-            <tr>
-                <td>${r.sensorCode}</td>
-                <td>${r.waterLevel.toFixed(2)} m</td>
-                <td>${r.flowRate.toFixed(2)}</td>
-                <td>${r.debrisLevel != null ? r.debrisLevel.toFixed(2) : 'N/A'}</td>
-                <td><span class="badge bg-${r.readingStatus === 'Normal' ? 'success' : r.readingStatus === 'Warning' ? 'warning' : 'danger'}">${r.readingStatus}</span></td>
-                <td>${new Date(r.readingTimestamp).toLocaleString()}</td>
-            </tr>
-        `).join('');
-=======
     showLoading();
     try {
         const response = await apiCall(`/api/Readings/canal/${Model.Canal?.Id}?limit=20`);
         if (response.ok) {
             const readings = await response.json();
             const tbody = document.getElementById('readingsBody');
+            const table = document.getElementById('readingsTable');
+            const empty = document.getElementById('readingsEmpty');
+            const statusBadge = r => r.readingStatus === 'Normal' ? 'bg-success' : r.readingStatus === 'Warning' ? 'bg-warning' : 'bg-danger';
             if (readings.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No readings available.</td></tr>';
+                tbody.innerHTML = '';
+                table.style.display = 'none';
+                empty.style.display = 'block';
             } else {
+                table.style.display = 'table';
+                empty.style.display = 'none';
                 tbody.innerHTML = readings.map(r => `
                     <tr>
-                        <td>${r.sensorCode}</td>
+                        <td><strong>${r.sensorCode}</strong></td>
                         <td>${r.waterLevel.toFixed(2)} m</td>
                         <td>${r.flowRate.toFixed(2)}</td>
                         <td>${r.debrisLevel != null ? r.debrisLevel.toFixed(2) : 'N/A'}</td>
-                        <td><span class="badge bg-${r.readingStatus === 'Normal' ? 'success' : r.readingStatus === 'Warning' ? 'warning' : 'danger'}">${r.readingStatus}</span></td>
+                        <td><span class="badge ${statusBadge(r)}">${r.readingStatus}</span></td>
                         <td>${new Date(r.readingTimestamp).toLocaleString()}</td>
                     </tr>
                 `).join('');
@@ -242,7 +240,6 @@ async function loadReadings() {
         showAlert('Failed to load readings: ' + e.message, 'danger');
     } finally {
         hideLoading();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 }
 
@@ -252,13 +249,8 @@ async function addSensor() {
         sensorType: document.getElementById('sensorType').value,
         canalId: '@Model.Canal?.Id',
         locationDescription: document.getElementById('sensorLocation').value || undefined,
-<<<<<<< HEAD
-        latitude: 0,
-        longitude: 0,
-=======
         latitude: parseFloat(document.getElementById('sensorLat').value) || 0,
         longitude: parseFloat(document.getElementById('sensorLng').value) || 0,
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
         communicationProtocol: document.getElementById('sensorProtocol').value
     };
 

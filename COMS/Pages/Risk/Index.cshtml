@@ -1,64 +1,57 @@
-@page
+﻿@page
 @model COMS.Pages.Risk.IndexModel
 @{
     ViewData["Title"] = "Flood Risk Analytics";
 }
 
-<<<<<<< HEAD
 <div class="page-header">
-    <div>
-        <h2>Flood Risk Analytics</h2>
-        <p class="text-muted mb-0">Historical data and predictive insights for flood mitigation planning.</p>
+    <div class="title-group">
+        <h2 class="page-title mb-1">Flood Risk Analytics</h2>
+        <p class="page-subtitle mb-0">Historical data and predictive insights for flood mitigation planning.</p>
     </div>
-    <button class="btn btn-primary" onclick="refreshAnalytics()">
-        <i class="bi bi-arrow-clockwise"></i> Refresh
-    </button>
-=======
-<div class="row mb-4">
-    <div class="col-12">
-        <h2 class="page-title">Flood Risk Analytics</h2>
-        <p class="page-subtitle">Historical data and predictive insights for flood mitigation planning.</p>
-    </div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-<<<<<<< HEAD
-            <div class="card-header"><i class="bi bi-bar-chart"></i> Risk Assessment by Canal</div>
-=======
+<div class="row g-4">
+    <div class="col-xl-6">
+        <div class="card h-100">
             <div class="card-header">Risk Assessment by Canal</div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
             <div class="card-body">
                 <div class="chart-container">
                     <canvas id="riskBarChart"></canvas>
+                    <div id="riskEmpty" class="chart-empty">
+                        <div class="empty-state mb-0">
+                            <i class="bi bi-pie-chart"></i>
+                            <p class="empty-title">No historical readings available</p>
+                            <p>Risk analytics will appear when monitoring data is recorded.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-<<<<<<< HEAD
-            <div class="card-header"><i class="bi bi-table"></i> Canal Analytics Summary</div>
-=======
+    <div class="col-xl-6">
+        <div class="card h-100">
             <div class="card-header">Canal Analytics Summary</div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table" id="analyticsTable">
+                    <table class="table table-hover" id="analyticsTable">
                         <thead>
                             <tr>
                                 <th>Canal</th>
-                                <th>Total Alerts</th>
-                                <th>Active</th>
-                                <th>Avg Water Level</th>
-                                <th>Risk Level</th>
+                                <th class="text-end">Total Alerts</th>
+                                <th class="text-end">Active</th>
+                                <th class="text-end">Avg Water Level</th>
+                                <th class="text-center">Risk Level</th>
                             </tr>
                         </thead>
                         <tbody id="analyticsBody">
                         </tbody>
                     </table>
+                </div>
+                <div id="analyticsEmpty" class="empty-state" style="display:none;">
+                    <i class="bi bi-pie-chart"></i>
+                    <p class="empty-title">No historical readings available</p>
+                    <p>Risk analytics will appear when monitoring data is recorded.</p>
                 </div>
             </div>
         </div>
@@ -69,97 +62,82 @@
 <script>
 let riskBarChart = null;
 
+const riskClass = r => r === 'High' ? 'risk-high' : r === 'Medium' ? 'risk-medium' : 'risk-low';
+
 async function loadAnalytics() {
-<<<<<<< HEAD
-    const response = await apiCall('/api/Risk/analytics');
-    if (response.ok) {
-        const analytics = await response.json();
-        if (analytics.length === 0) {
-            document.getElementById('analyticsBody').innerHTML = '<tr><td colspan="5" class="text-center text-muted">No analytics data available.</td></tr>';
-            return;
-        }
-        document.getElementById('analyticsBody').innerHTML = analytics.map(a => `
-            <tr>
-                <td><strong>${a.canalName}</strong></td>
-                <td>${a.totalAlerts}</td>
-                <td><span class="badge bg-${a.activeAlerts > 0 ? 'danger' : 'success'}">${a.activeAlerts}</span></td>
-                <td>${a.averageWaterLevel.toFixed(2)} m</td>
-                <td><span class="badge bg-${a.currentRiskLevel === 'High' ? 'danger' : a.currentRiskLevel === 'Medium' ? 'warning' : 'success'}">${a.currentRiskLevel}</span></td>
-            </tr>
-        `).join('');
-
-        const labels = analytics.map(a => a.canalName);
-        const riskScores = analytics.map(a => a.totalAlerts);
-        const avgLevels = analytics.map(a => a.averageWaterLevel);
-
-        const ctx = document.getElementById('riskBarChart').getContext('2d');
-        if (riskBarChart) riskBarChart.destroy();
-        riskBarChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'Total Alerts', data: riskScores, backgroundColor: '#dc3545' },
-                    { label: 'Avg Water Level (m)', data: avgLevels, backgroundColor: '#0dcaf0' }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } },
-                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-            }
-        });
-    }
-}
-
-function refreshAnalytics() {
-    loadAnalytics();
-    showAlert('Analytics refreshed', 'info');
-=======
     showLoading();
     try {
         const response = await apiCall('/api/Risk/analytics');
         if (response.ok) {
             const analytics = await response.json();
             const tbody = document.getElementById('analyticsBody');
+            const table = document.getElementById('analyticsTable');
+            const empty = document.getElementById('analyticsEmpty');
+            const canvas = document.getElementById('riskBarChart');
+            const canvasEmpty = document.getElementById('riskEmpty');
+
             if (analytics.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No analytics data available.</td></tr>';
+                tbody.innerHTML = '';
+                table.style.display = 'none';
+                empty.style.display = 'block';
+
+                canvas.style.display = 'none';
+                canvasEmpty.style.display = 'flex';
             } else {
+                table.style.display = 'table';
+                empty.style.display = 'none';
+
                 tbody.innerHTML = analytics.map(a => `
                     <tr>
-                        <td>${a.canalName}</td>
-                        <td>${a.totalAlerts}</td>
-                        <td><span class="badge bg-${a.activeAlerts > 0 ? 'danger' : 'success'}">${a.activeAlerts}</span></td>
-                        <td>${a.averageWaterLevel.toFixed(2)} m</td>
-                        <td><span class="badge bg-${a.currentRiskLevel === 'High' ? 'danger' : a.currentRiskLevel === 'Medium' ? 'warning' : 'success'}">${a.currentRiskLevel}</span></td>
+                        <td><strong>${a.canalName}</strong></td>
+                        <td class="text-end">${a.totalAlerts}</td>
+                        <td class="text-end"><span class="badge ${a.activeAlerts > 0 ? 'bg-danger' : 'bg-success'}">${a.activeAlerts}</span></td>
+                        <td class="text-end">${a.averageWaterLevel.toFixed(2)} m</td>
+                        <td class="text-center"><span class="badge ${riskClass(a.currentRiskLevel)}">${a.currentRiskLevel}</span></td>
                     </tr>
                 `).join('');
+
+                canvas.style.display = 'block';
+                canvasEmpty.style.display = 'none';
+                const labels = analytics.map(a => a.canalName);
+                const riskScores = analytics.map(a => a.totalAlerts);
+                const avgLevels = analytics.map(a => a.averageWaterLevel);
+
+                if (riskBarChart) riskBarChart.destroy();
+                const ctx = canvas.getContext('2d');
+                riskBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            { label: 'Total Alerts', data: riskScores, backgroundColor: '#0d6efd', borderRadius: 4 },
+                            { label: 'Avg Water Level (m)', data: avgLevels, backgroundColor: '#0dcaf0', borderRadius: 4, hidden: avgLevels.every(v => !v) }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                ticks: { font: { size: 11 } }
+                            },
+                            x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+                        },
+                        plugins: {
+                            legend: { position: 'top', labels: { font: { size: 11 } } },
+                            tooltip: { titleFont: { size: 12 }, bodyFont: { size: 11 } }
+                        }
+                    }
+                });
             }
-
-            const labels = analytics.map(a => a.canalName);
-            const riskScores = analytics.map(a => a.totalAlerts);
-            const avgLevels = analytics.map(a => a.averageWaterLevel);
-
-            const ctx = document.getElementById('riskBarChart').getContext('2d');
-            if (riskBarChart) riskBarChart.destroy();
-            riskBarChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Total Alerts', data: riskScores, backgroundColor: '#dc3545' },
-                        { label: 'Avg Water Level (m)', data: avgLevels, backgroundColor: '#0dcaf0' }
-                    ]
-                }
-            });
         }
     } catch (e) {
         showAlert('Failed to load analytics: ' + e.message, 'danger');
     } finally {
         hideLoading();
     }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }
 
 document.addEventListener('DOMContentLoaded', loadAnalytics);

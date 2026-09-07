@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace COMS.Models;
@@ -43,22 +43,6 @@ public class CommunityReport
     [MaxLength(255)]
     public string? ResolutionNotes { get; set; }
 
-<<<<<<< HEAD
-    [MaxLength(500)]
-    public string? CompletionImageUrl { get; set; }
-
-    [MaxLength(1000)]
-    public string? CompletionRemarks { get; set; }
-
-    public Guid? CompletedByUserId { get; set; }
-
-    public DateTime? CompletedAt { get; set; }
-
     public Canal? Canal { get; set; }
     public User? ReportedByUser { get; set; }
-    public User? CompletedByUser { get; set; }
-=======
-    public Canal? Canal { get; set; }
-    public User? ReportedByUser { get; set; }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }

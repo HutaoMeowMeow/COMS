@@ -1,4 +1,4 @@
-namespace COMS.DTOs;
+﻿namespace COMS.DTOs;
 
 public class DashboardSummaryDto
 {

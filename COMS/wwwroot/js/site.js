@@ -11,8 +11,6 @@ function getAuthHeaders() {
     return headers;
 }
 
-<<<<<<< HEAD
-=======
 function showLoading() {
     const existing = document.getElementById('globalLoading');
     if (existing) return;
@@ -29,7 +27,6 @@ function hideLoading() {
     if (el) el.remove();
 }
 
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 async function apiCall(url, options = {}) {
     const config = {
         ...options,
@@ -40,8 +37,6 @@ async function apiCall(url, options = {}) {
         logout();
         throw new Error('Unauthorized');
     }
-<<<<<<< HEAD
-=======
     if (!response.ok) {
         const text = await response.text();
         let message = 'Request failed';
@@ -53,7 +48,6 @@ async function apiCall(url, options = {}) {
         }
         throw new Error(message);
     }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     return response;
 }
 
@@ -61,17 +55,9 @@ function showAlert(message, type = 'info') {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
     alertDiv.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
-<<<<<<< HEAD
     const main = document.querySelector('.container-fluid') || document.querySelector('main');
     if (main) main.prepend(alertDiv);
     setTimeout(() => alertDiv.remove(), 5000);
-=======
-    const main = document.querySelector('main');
-    if (main) {
-        main.prepend(alertDiv);
-        setTimeout(() => alertDiv.remove(), 5000);
-    }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }
 
 async function loadUser() {
@@ -80,19 +66,13 @@ async function loadUser() {
         const response = await apiCall('/api/Auth/me');
         if (response.ok) {
             currentUser = await response.json();
-<<<<<<< HEAD
             const userDisplay = document.getElementById('userDisplay');
             if (userDisplay) {
                 userDisplay.textContent = `${currentUser.firstName} ${currentUser.lastName} (${currentUser.role})`;
-=======
-            const display = document.getElementById('userDisplay');
-            if (display) {
-                display.textContent = `${currentUser.firstName} ${currentUser.lastName} (${currentUser.role})`;
             }
             const logoutItem = document.getElementById('logoutItem');
             if (logoutItem) {
                 logoutItem.style.display = 'block';
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
             }
         }
     } catch (e) {
@@ -109,23 +89,6 @@ function logout() {
 
 function initSignalR(onMessage) {
     if (signalRConnection) return;
-<<<<<<< HEAD
-    signalRConnection = new signalR.HubConnectionBuilder()
-        .withUrl(SIGNALR_HUB, { accessTokenFactory: () => token })
-        .withAutomaticReconnect()
-        .build();
-
-    signalRConnection.on('NewReading', (reading) => {
-        if (onMessage) onMessage('reading', reading);
-    });
-
-    signalRConnection.on('NewAlert', (alert) => {
-        if (onMessage) onMessage('alert', alert);
-        showAlert(`New Alert: ${alert.title} - ${alert.description}`, 'danger');
-    });
-
-    signalRConnection.start().catch(err => console.error('SignalR connection error:', err));
-=======
     try {
         signalRConnection = new signalR.HubConnectionBuilder()
             .withUrl(SIGNALR_HUB, { accessTokenFactory: () => token })
@@ -146,19 +109,11 @@ function initSignalR(onMessage) {
     } catch (e) {
         console.error('SignalR init error:', e);
     }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const publicPages = ['/Auth/Login', '/Auth/Register'];
     const path = window.location.pathname;
-<<<<<<< HEAD
-    if (!publicPages.some(p => path.startsWith(p)) && !token) {
-        window.location.href = '/Auth/Login';
-        return;
-    }
-    if (publicPages.some(p => path.startsWith(p)) && token) {
-=======
     const isPublic = publicPages.some(p => path === p || path.startsWith(p + '/'));
 
     if (!isPublic && !token) {
@@ -166,14 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     if (isPublic && token) {
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
         window.location.href = '/Dashboard';
         return;
     }
     loadUser();
-<<<<<<< HEAD
-});
-=======
     loadNotifications();
 });
 
@@ -225,4 +176,3 @@ async function markNotificationRead(id) {
         console.error('Failed to mark notification as read', e);
     }
 }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719

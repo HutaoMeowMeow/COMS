@@ -1,4 +1,4 @@
-using COMS.DTOs;
+﻿using COMS.DTOs;
 using COMS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,8 +37,6 @@ public class ReadingsController : ControllerBase
         var readings = await _sensorService.GetReadingsBySensorAsync(sensorId, limit);
         return Ok(readings);
     }
-<<<<<<< HEAD
-=======
 
     [HttpGet("canal/{canalId}")]
     public async Task<IActionResult> GetByCanal(Guid canalId, [FromQuery] int limit = 100)
@@ -46,5 +44,4 @@ public class ReadingsController : ControllerBase
         var readings = await _sensorService.GetReadingsByCanalAsync(canalId, limit);
         return Ok(readings);
     }
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }

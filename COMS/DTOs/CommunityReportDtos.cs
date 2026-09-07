@@ -1,4 +1,4 @@
-namespace COMS.DTOs;
+﻿namespace COMS.DTOs;
 
 public class CreateCommunityReportDto
 {
@@ -16,15 +16,6 @@ public class UpdateCommunityReportDto
     public string? ResolutionNotes { get; set; }
 }
 
-<<<<<<< HEAD
-public class CompleteReportDto
-{
-    public string? CompletionImageUrl { get; set; }
-    public string? CompletionRemarks { get; set; }
-}
-
-=======
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 public class CommunityReportResponseDto
 {
     public Guid Id { get; set; }
@@ -42,12 +33,4 @@ public class CommunityReportResponseDto
     public DateTime? VerifiedAt { get; set; }
     public DateTime? ResolvedAt { get; set; }
     public string? ResolutionNotes { get; set; }
-<<<<<<< HEAD
-    public string? CompletionImageUrl { get; set; }
-    public string? CompletionRemarks { get; set; }
-    public Guid? CompletedByUserId { get; set; }
-    public string? CompletedByUserName { get; set; }
-    public DateTime? CompletedAt { get; set; }
-=======
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }

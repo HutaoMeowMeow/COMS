@@ -1,4 +1,4 @@
-using COMS.DTOs;
+﻿using COMS.DTOs;
 using COMS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,11 +7,7 @@ namespace COMS.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-<<<<<<< HEAD
-[Authorize(Roles = "Admin,LGU,Barangay,Maintenance")]
-=======
 [Authorize(Roles = "Admin,LGU,Barangay,Maintenance,Resident")]
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 public class DashboardController : ControllerBase
 {
     private readonly ICanalService _canalService;

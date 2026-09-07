@@ -1,42 +1,23 @@
-@page
+﻿@page
 @model COMS.Pages.Reports.IndexModel
 @{
     ViewData["Title"] = "Community Reports";
 }
 
-<<<<<<< HEAD
 <div class="page-header">
-    <div>
-        <h2>Community Reports</h2>
-        <p class="text-muted mb-0">View and manage obstruction reports from residents.</p>
+    <div class="title-group">
+        <h2 class="page-title mb-1">Community Reports</h2>
+        <p class="page-subtitle mb-0">Review and manage community-submitted canal reports.</p>
     </div>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
         <i class="bi bi-plus-circle"></i> Submit Report
     </button>
-=======
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="section-header">
-            <div>
-                <h2 class="page-title mb-0">Community Reports</h2>
-                <p class="page-subtitle mb-0">Review and manage community-submitted canal reports.</p>
-            </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createReportModal">
-                <i class="bi bi-plus-circle"></i> Submit Report
-            </button>
-        </div>
-    </div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 </div>
 
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-<<<<<<< HEAD
             <table class="table table-hover" id="reportsTable">
-=======
-            <table class="table table-striped" id="reportsTable">
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -44,16 +25,17 @@
                         <th>Reported By</th>
                         <th>Type</th>
                         <th>Status</th>
-                        <th>Reported At</th>
-<<<<<<< HEAD
-                        <th>Actions</th>
-=======
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
+                        <th class="text-end">Reported At</th>
                     </tr>
                 </thead>
                 <tbody id="reportsBody">
                 </tbody>
             </table>
+        </div>
+        <div id="reportsEmpty" class="empty-state" style="display:none;">
+            <i class="bi bi-clipboard"></i>
+            <p class="empty-title">No reports found</p>
+            <p class="text-muted">There are currently no community reports to display.</p>
         </div>
     </div>
 </div>
@@ -84,19 +66,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Title</label>
-<<<<<<< HEAD
-                        <input type="text" class="form-control" id="reportTitle" placeholder="Brief description of the issue" required />
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="reportDescription" rows="3" placeholder="Provide details about the obstruction..." required></textarea>
-=======
                         <input type="text" class="form-control" id="reportTitle" required />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" id="reportDescription" rows="3" required></textarea>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
                     </div>
                 </form>
             </div>
@@ -110,66 +84,45 @@
 
 @section Scripts {
 <script>
+const reportStatusClass = s => s === 'Pending' ? 'bg-warning' : s === 'Verified' ? 'bg-info' : 'bg-success';
+
 async function loadCanals() {
-    const response = await apiCall('/api/Canals');
-    if (response.ok) {
-        const canals = await response.json();
-        const select = document.getElementById('reportCanalId');
-<<<<<<< HEAD
-        select.innerHTML = '<option value=\"\">Select Canal</option>' + canals.map(c => `<option value=\"${c.id}\">${c.name}</option>`).join('');
-=======
-        select.innerHTML = '<option value="">Select Canal</option>' + canals.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
+    try {
+        const response = await apiCall('/api/Canals');
+        if (response.ok) {
+            const canals = await response.json();
+            const select = document.getElementById('reportCanalId');
+            select.innerHTML = '<option value="">Select Canal</option>' + canals.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        }
+    } catch (e) {
+        console.error('Failed to load canals', e);
     }
 }
 
 async function loadReports() {
-<<<<<<< HEAD
-    const response = await apiCall('/api/Reports');
-    if (response.ok) {
-        const reports = await response.json();
-        if (reports.length === 0) {
-            document.getElementById('reportsBody').innerHTML = '<tr><td colspan="7" class="text-center text-muted">No reports found.</td></tr>';
-            return;
-        }
-        document.getElementById('reportsBody').innerHTML = reports.map(r => `
-            <tr>
-                <td><strong>${r.title}</strong></td>
-                <td>${r.canalName}</td>
-                <td>${r.reportedByUserName}</td>
-                <td>${r.reportType}</td>
-                <td><span class="badge bg-${r.status === 'Pending' ? 'warning' : r.status === 'Verified' ? 'info' : r.status === 'Completed' ? 'success' : 'secondary'}">${r.status}</span></td>
-                <td>${new Date(r.reportedAt).toLocaleString()}</td>
-                <td>
-                    <button class="btn btn-sm btn-info" onclick="viewReport('${r.id}')">View</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-}
-
-function viewReport(id) {
-    window.location.href = `/Reports/Details?id=${id}`;
-}
-
-=======
     showLoading();
     try {
         const response = await apiCall('/api/Reports');
         if (response.ok) {
             const reports = await response.json();
             const tbody = document.getElementById('reportsBody');
+            const table = document.getElementById('reportsTable');
+            const empty = document.getElementById('reportsEmpty');
             if (reports.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No reports found.</td></tr>';
+                tbody.innerHTML = '';
+                table.style.display = 'none';
+                empty.style.display = 'block';
             } else {
+                table.style.display = 'table';
+                empty.style.display = 'none';
                 tbody.innerHTML = reports.map(r => `
                     <tr>
-                        <td>${r.title}</td>
+                        <td><strong>${r.title}</strong></td>
                         <td>${r.canalName}</td>
                         <td>${r.reportedByUserName}</td>
                         <td>${r.reportType}</td>
-                        <td><span class="badge bg-${r.status === 'Pending' ? 'warning' : r.status === 'Verified' ? 'info' : 'success'}">${r.status}</span></td>
-                        <td>${new Date(r.reportedAt).toLocaleString()}</td>
+                        <td><span class="badge ${reportStatusClass(r.status)}">${r.status}</span></td>
+                        <td class="text-end">${new Date(r.reportedAt).toLocaleString()}</td>
                     </tr>
                 `).join('');
             }
@@ -181,7 +134,6 @@ function viewReport(id) {
     }
 }
 
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 async function createReport() {
     const data = {
         canalId: document.getElementById('reportCanalId').value,

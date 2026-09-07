@@ -1,11 +1,8 @@
-using COMS.Data;
+﻿using COMS.Data;
 using COMS.DTOs;
 using COMS.Hubs;
 using COMS.Models;
-<<<<<<< HEAD
-=======
 using Microsoft.EntityFrameworkCore;
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 using Microsoft.AspNetCore.SignalR;
 
 namespace COMS.Services;

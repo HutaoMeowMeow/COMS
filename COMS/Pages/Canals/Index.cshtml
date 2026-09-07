@@ -1,49 +1,42 @@
-@page
+﻿@page
 @model COMS.Pages.Canals.IndexModel
 @{
     ViewData["Title"] = "Canals";
 }
 
-<<<<<<< HEAD
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Canal Management</h2>
+<div class="page-header">
+    <div class="title-group">
+        <h2 class="page-title mb-1">Canal Management</h2>
+        <p class="page-subtitle mb-0">Monitor and manage all registered canals.</p>
+    </div>
     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCanalModal">
         <i class="bi bi-plus-circle"></i> Add Canal
     </button>
-=======
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="section-header">
-            <div>
-                <h2 class="page-title mb-0">Canal Management</h2>
-                <p class="page-subtitle mb-0">Monitor and manage all registered canals.</p>
-            </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCanalModal">
-                <i class="bi bi-plus-circle"></i> Add Canal
-            </button>
-        </div>
-    </div>
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 </div>
 
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-striped" id="canalsTable">
+            <table class="table table-hover" id="canalsTable">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Location</th>
                         <th>Barangay</th>
                         <th>Status</th>
-                        <th>Length (m)</th>
+                        <th class="text-end">Length (m)</th>
                         <th>Sensors</th>
-                        <th>Actions</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="canalsBody">
                 </tbody>
             </table>
+            <div id="canalsEmpty" class="empty-state" style="display:none;">
+                <i class="bi bi-water"></i>
+                <p class="empty-title">No canals found</p>
+                <p>Register a canal to begin monitoring canal obstruction and flood risk.</p>
+            </div>
         </div>
     </div>
 </div>
@@ -65,40 +58,40 @@
                         <label class="form-label">Location</label>
                         <input type="text" class="form-control" id="canalLocation" required />
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
                             <label class="form-label">Barangay</label>
                             <input type="text" class="form-control" id="canalBarangay" />
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6">
                             <label class="form-label">Municipality</label>
                             <input type="text" class="form-control" id="canalMunicipality" value="Cebu City" />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-4">
                             <label class="form-label">Length (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalLength" required />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <label class="form-label">Width (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalWidth" required />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <label class="form-label">Depth (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalDepth" required />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-4">
                             <label class="form-label">Normal Level (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalNormal" required />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <label class="form-label">Warning Level (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalWarning" required />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-4">
                             <label class="form-label">Critical Level (m)</label>
                             <input type="number" step="0.1" class="form-control" id="canalCritical" required />
                         </div>
@@ -116,43 +109,32 @@
 @section Scripts {
 <script>
 async function loadCanals() {
-<<<<<<< HEAD
-    const response = await apiCall('/api/Canals');
-    if (response.ok) {
-        const canals = await response.json();
-        document.getElementById('canalsBody').innerHTML = canals.map(c => `
-            <tr>
-                <td>${c.name}</td>
-                <td>${c.location}</td>
-                <td>${c.barangay || 'N/A'}</td>
-                <td><span class="status-dot status-${c.status.toLowerCase()}"></span>${c.status}</td>
-                <td>${c.lengthMeters}</td>
-                <td>${c.sensorCount}</td>
-                <td>
-                    <button class="btn btn-sm btn-info" onclick="viewCanal('${c.id}')">View</button>
-                </td>
-            </tr>
-        `).join('');
-=======
     showLoading();
     try {
         const response = await apiCall('/api/Canals');
         if (response.ok) {
             const canals = await response.json();
             const tbody = document.getElementById('canalsBody');
+            const table = document.getElementById('canalsTable');
+            const empty = document.getElementById('canalsEmpty');
             if (canals.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No canals found.</td></tr>';
+                tbody.innerHTML = '';
+                table.style.display = 'none';
+                empty.style.display = 'block';
             } else {
+                table.style.display = 'table';
+                empty.style.display = 'none';
+                const statusBadge = c => c.status === 'Normal' ? 'bg-success' : c.status === 'Warning' ? 'bg-warning' : 'bg-danger';
                 tbody.innerHTML = canals.map(c => `
                     <tr>
-                        <td>${c.name}</td>
+                        <td><strong>${c.name}</strong></td>
                         <td>${c.location}</td>
-                        <td>${c.barangay || 'N/A'}</td>
-                        <td><span class="status-dot status-${c.status.toLowerCase()}"></span>${c.status}</td>
-                        <td>${c.lengthMeters}</td>
+                        <td>${c.barangay || '<span class="text-muted">N/A</span>'}</td>
+                        <td><span class="status-dot status-${c.status.toLowerCase()}"></span><span class="badge ${statusBadge(c)}">${c.status}</span></td>
+                        <td class="text-end">${c.lengthMeters}</td>
                         <td>${c.sensorCount}</td>
-                        <td>
-                            <button class="btn btn-sm btn-info" onclick="viewCanal('${c.id}')">View</button>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewCanal('${c.id}')">View</button>
                         </td>
                     </tr>
                 `).join('');
@@ -162,7 +144,6 @@ async function loadCanals() {
         showAlert('Failed to load canals: ' + e.message, 'danger');
     } finally {
         hideLoading();
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
     }
 }
 

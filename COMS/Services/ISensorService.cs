@@ -1,10 +1,7 @@
-using COMS.Data;
+﻿using COMS.Data;
 using COMS.DTOs;
 using COMS.Models;
-<<<<<<< HEAD
-=======
 using Microsoft.EntityFrameworkCore;
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 
 namespace COMS.Services;
 
@@ -18,8 +15,5 @@ public interface ISensorService
     Task<bool> DeleteAsync(Guid id);
     Task<SensorReadingResponseDto> IngestReadingAsync(SensorReadingIngestionDto dto);
     Task<IEnumerable<SensorReadingResponseDto>> GetReadingsBySensorAsync(Guid sensorId, int limit = 100);
-<<<<<<< HEAD
-=======
     Task<IEnumerable<SensorReadingResponseDto>> GetReadingsByCanalAsync(Guid canalId, int limit = 100);
->>>>>>> db46004de7d488abfb831db9c6cd307518689719
 }
